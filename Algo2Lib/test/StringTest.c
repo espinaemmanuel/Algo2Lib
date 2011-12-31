@@ -1,43 +1,50 @@
 #include "unity_fixture.h"
-#include <stdio.h>
-#include <memory.h>
+#include "tstring.h"
 
 TEST_GROUP(String);
 
-static char output[100];
-static const char * expected;
-
 TEST_SETUP(String)
 {
-    memset(output, 0xaa, sizeof output);
-    expected = "";
 }
 
 TEST_TEAR_DOWN(String)
 {
 }
 
-static void expect(const char * s)
+
+TEST(String, Igualdad)
 {
-    expected = s;
+	TString sA, sB;
+	TString_crear(&sA, "Hola mundo");
+	TString_crear(&sB, "Hola mundo");
+
+	TEST_ASSERT_EQUAL(TString_sonIguales(&sA, &sB), 1);
+
+	TString_destruir(&sA);
+	TString_destruir(&sB);
 }
 
-static void given(int charsWritten)
+TEST(String, IgualdadVacio)
 {
-    TEST_ASSERT_EQUAL(strlen(expected), charsWritten);
-    TEST_ASSERT_EQUAL_STRING(expected, output);
-    TEST_ASSERT_BYTES_EQUAL(0xaa, output[strlen(expected) + 1]);
+	TString sA, sB;
+	TString_crear(&sA, "");
+	TString_crear(&sB, "");
+
+	TEST_ASSERT_EQUAL(TString_sonIguales(&sA, &sB), 1);
+
+	TString_destruir(&sA);
+	TString_destruir(&sB);
 }
 
-
-TEST(String, NoFormatOperations)
+TEST(String, Desigualdad)
 {
-    expect("hey");
-    given(sprintf(output, "hey"));
+	TString sA, sB;
+	TString_crear(&sA, "Hola");
+	TString_crear(&sB, "Mundo");
+
+	TEST_ASSERT_EQUAL(TString_sonIguales(&sA, &sB), 0);
+
+	TString_destruir(&sA);
+	TString_destruir(&sB);
 }
 
-TEST(String, InsertString)
-{
-    expect("Hello World\n");
-    given(sprintf(output, "Hello %s\n", "World"));
-}
