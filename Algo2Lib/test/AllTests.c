@@ -3,6 +3,7 @@
 static void RunAllTests(void)
 {
     RUN_TEST_GROUP(String);
+    RUN_TEST_GROUP(Lista);
 }
 
 int main(int argc, char * argv[])
